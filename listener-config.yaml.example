@@ -1,0 +1,9 @@
+chains:
+  - id: 1
+    name: Ethereum Mainnet
+    rpcURL: https://eth.llamarpc.com
+
+    events:
+      - name: Transfer
+        abi: event Transfer(address indexed from, address indexed to, uint256 value)
+        contract: '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48'
