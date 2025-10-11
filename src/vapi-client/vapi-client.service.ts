@@ -14,13 +14,21 @@ export class VAPIClientService {
     private readonly configService: ConfigService,
   ) {}
 
-  async verifyEvent(event: any) {
+  async verifyEvent(chainId: number, event: { [key: string]: any }) {
     const vapiUrl = this.configService.get<string>('VAPI_BASE_URL');
     const apiKey = this.configService.get<string>('VAPI_API_KEY');
+    const payload = {
+      chainId,
+      txHash: event.transactionHash as string,
+      eventName: event.event as string,
+      eventData: event,
+    };
 
     try {
-      this.logger.log(`Verifying event: ${JSON.stringify(event)}`);
-      const response = await this.axios.post(`${vapiUrl}/verify`, event, {
+      this.logger.log(
+        `Verifying event transaction: ${JSON.stringify(payload)}`,
+      );
+      const response = await this.axios.post(`${vapiUrl}/verify`, payload, {
         headers: {
           'x-api-key': apiKey,
         },

@@ -32,13 +32,31 @@ export class ListenerConfigService {
   }
 
   loadListenerConfig() {
+    let parsedConfig: ListenerConfigType;
+
+    const listenerConfigEnv = this.configService.get<string>('LISTENER_CONFIG');
+
     const listenerConfigFilePath = this.configService.get<string>(
       'LISTENER_CONFIG_FILE_PATH',
     ) as string;
 
-    const absolutePath = this.getAbsolutePath(listenerConfigFilePath);
-    const fileContent = this.readConfigFile(absolutePath);
-    const parsedConfig = this.parseConfig(fileContent);
+    // If the config is provided via env variable, that takes precedence
+    // over reading the config from the file path
+    //
+    if (listenerConfigEnv) {
+      this.logger.log(
+        `Loading configuration from environment variable LISTENER_CONFIG`,
+      );
+
+      parsedConfig = this.parseConfig(listenerConfigEnv.replace(/\\n/g, '\n'));
+    } else {
+      this.logger.log(
+        `Loading configuration from file path: ${listenerConfigFilePath}`,
+      );
+      const absolutePath = this.getAbsolutePath(listenerConfigFilePath);
+      const fileContent = this.readConfigFile(absolutePath);
+      parsedConfig = this.parseConfig(fileContent);
+    }
 
     this.validateConfig(parsedConfig);
     this.listenerConfig = parsedConfig;

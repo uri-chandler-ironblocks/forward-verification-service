@@ -74,7 +74,7 @@ export class ListenerService {
             );
 
             for (const evt of newEvents) {
-              await this.vapiClientService.verifyEvent(evt);
+              await this.vapiClientService.verifyEvent(chain.id, evt);
             }
           }
 

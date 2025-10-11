@@ -15,7 +15,11 @@ export const ConfigSchema = Joi.object({
 
   // The path to the configuration file which lists which chains and events to listen to
   //
-  LISTENER_CONFIG_FILE_PATH: Joi.string().required(),
+  LISTENER_CONFIG_FILE_PATH: Joi.string().allow(''),
+
+  // The listener configuration file, provided as a full YAML string
+  //
+  LISTENER_CONFIG: Joi.string().allow(''),
 
   // Enable or disable the health check endpoint
   //
