@@ -48,7 +48,7 @@ export class ListenerConfigService {
         `Loading configuration from environment variable LISTENER_CONFIG`,
       );
 
-      parsedConfig = this.parseConfig(listenerConfigEnv.replace(/\\n/g, '\n'));
+      parsedConfig = JSON.parse(listenerConfigEnv) as ListenerConfigType;
     } else {
       this.logger.log(
         `Loading configuration from file path: ${listenerConfigFilePath}`,
